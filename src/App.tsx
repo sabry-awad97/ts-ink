@@ -1,29 +1,39 @@
-import React, { FC } from "react";
-import { Box, Text } from "ink";
+import React, { FC, useState } from "react";
+import { useApp, useInput, Box, Text } from "ink";
 
-// App functional component.
-const Style = {
-	backgroundColor: "#161b22",
-	textColor: "#e6e6e6",
-	brandColor: "#2f9ece",
-};
-type PropTypes = {
-	name?: string;
-};
-export const App: FC<PropTypes> = ({ name = "Stranger" }) => {
+export const App: FC = ({}) => {
+	const { exit } = useApp();
+	const [x, setX] = useState(1);
+	const [y, setY] = useState(1);
+
+	useInput((input, key) => {
+		if (input === "q") {
+			exit();
+		}
+
+		if (key.leftArrow) {
+			setX(Math.max(1, x - 1));
+		}
+
+		if (key.rightArrow) {
+			setX(Math.min(20, x + 1));
+		}
+
+		if (key.upArrow) {
+			setY(Math.max(1, y - 1));
+		}
+
+		if (key.downArrow) {
+			setY(Math.min(20, y + 1));
+		}
+	});
+
 	return (
-		<Box
-			borderStyle="round"
-			borderColor={Style.brandColor}
-			flexDirection="column"
-			alignItems="center"
-		>
-			<Text color={Style.textColor} backgroundColor={Style.backgroundColor}>
-				{`👋 Hello 👋`}
-			</Text>
-			<Text bold color={Style.textColor} backgroundColor={Style.brandColor}>
-				{name}
-			</Text>
+		<Box flexDirection="column">
+			<Text>Use arrow keys to move the icon, Press 'q' to exit</Text>
+			<Box height={12} paddingLeft={x} paddingTop={y}>
+				<Text>😊</Text>
+			</Box>
 		</Box>
 	);
 };
